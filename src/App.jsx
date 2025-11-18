@@ -1,14 +1,13 @@
-import React from 'react'
-import './App.css'
-import FeedbackForm from './components/FeedbackForm.jsx'
-import './components/FeedbackForm.css'
+import React from "react";
+import "./App.css";
+import SimpleForm from "./components/SimpleForm.jsx";
 
 function App() {
   return (
-   <>
- <FeedbackForm/>
-   </>
-  )
+    <>
+      <SimpleForm />
+    </>
+  );
 }
 
-export default App
+export default App;
