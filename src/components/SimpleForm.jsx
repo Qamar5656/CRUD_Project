@@ -1,4 +1,5 @@
 import React from "react";
+import axios from "axios";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 
@@ -31,12 +32,26 @@ const validationSchema = Yup.object({
 });
 
 function SimpleForm() {
-  const handleSubmit = (values, { setSubmitting, resetForm }) => {
-    console.log("Form Values:", values);
-    resetForm();
-    setSubmitting(false);
-  };
+  // const handleSubmit = (values, { setSubmitting, resetForm }) => {
+  //   console.log("Form Values:", values);
+  //   resetForm();
+  //   setSubmitting(false);
+  // };
 
+  const handleSubmit = async (values, { setSubmitting, resetForm }) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/register",
+        values
+      );
+      console.log("Backend Response:", response.data);
+      resetForm();
+    } catch (error) {
+      console.error("Error sending data to backend:", error);
+    } finally {
+      setSubmitting(false);
+    }
+  };
   return (
     <div className="max-w-md mx-auto mt-20 p-6 bg-white rounded-lg shadow-md">
       <h2 className="text-2xl font-semibold text-center mb-6">Simple Form</h2>
@@ -105,7 +120,7 @@ function SimpleForm() {
               <label className="block text-sm font-medium mb-1">Password</label>
               <Field
                 name="password"
-                type="text"
+                type="password"
                 placeholder="Enter your Password"
                 className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
               />
