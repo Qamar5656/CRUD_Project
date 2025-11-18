@@ -8,7 +8,7 @@ const initialValues = {
   firstName: "",
   lastName: "",
   email: "",
-  phone: "",
+  // phone: "",
   password: "",
 };
 
@@ -32,12 +32,6 @@ const validationSchema = Yup.object({
 });
 
 function SimpleForm() {
-  // const handleSubmit = (values, { setSubmitting, resetForm }) => {
-  //   console.log("Form Values:", values);
-  //   resetForm();
-  //   setSubmitting(false);
-  // };
-
   const handleSubmit = async (values, { setSubmitting, resetForm }) => {
     try {
       const response = await axios.post(
