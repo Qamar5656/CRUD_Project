@@ -7,6 +7,7 @@ function UsersPage() {
   const [usersData, setUsersData] = useState([]);
   const [loadingUsers, setLoadingUsers] = useState(true);
 
+  //Get Request
   const fetchUsers = async () => {
     setLoadingUsers(true);
     try {
@@ -19,6 +20,16 @@ function UsersPage() {
     }
   };
 
+  //Delete Request
+  const DeleteUser = async (id) => {
+    try {
+      await axios.delete(`http://localhost:5000/api/users/${id}`);
+      fetchUsers();
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   useEffect(() => {
     fetchUsers();
   }, []);
@@ -27,7 +38,11 @@ function UsersPage() {
     <>
       <div>
         <SimpleForm onSuccess={fetchUsers} />
-        <UsersList usersData={usersData} loadingUsers={loadingUsers} />
+        <UsersList
+          usersData={usersData}
+          loadingUsers={loadingUsers}
+          onDelete={DeleteUser}
+        />
       </div>
     </>
   );
