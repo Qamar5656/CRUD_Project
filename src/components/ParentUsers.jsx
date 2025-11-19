@@ -6,8 +6,9 @@ import UsersList from "./UserList";
 function UsersPage() {
   const [usersData, setUsersData] = useState([]);
   const [loadingUsers, setLoadingUsers] = useState(true);
+  const [editingUser, setEditingUser] = useState(null); // For update
 
-  //Get Request
+  // Get Request
   const fetchUsers = async () => {
     setLoadingUsers(true);
     try {
@@ -20,10 +21,21 @@ function UsersPage() {
     }
   };
 
-  //Delete Request
+  // Delete Request
   const DeleteUser = async (id) => {
     try {
       await axios.delete(`http://localhost:5000/api/users/${id}`);
+      fetchUsers();
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  // Update Request
+  const UpdateUser = async (id, updatedData) => {
+    try {
+      await axios.put(`http://localhost:5000/api/users/${id}`, updatedData);
+      setEditingUser(null); // Clear editing state
       fetchUsers();
     } catch (err) {
       console.error(err);
@@ -35,16 +47,19 @@ function UsersPage() {
   }, []);
 
   return (
-    <>
-      <div>
-        <SimpleForm onSuccess={fetchUsers} />
-        <UsersList
-          usersData={usersData}
-          loadingUsers={loadingUsers}
-          onDelete={DeleteUser}
-        />
-      </div>
-    </>
+    <div className="p-4">
+      <SimpleForm
+        onSuccess={fetchUsers}
+        editingUser={editingUser}
+        onUpdate={UpdateUser}
+      />
+      <UsersList
+        usersData={usersData}
+        loadingUsers={loadingUsers}
+        onDelete={DeleteUser}
+        onEdit={(user) => setEditingUser(user)} // Set editing user
+      />
+    </div>
   );
 }
 
