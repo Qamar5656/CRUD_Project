@@ -1,18 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import axios from "axios";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 
-// Initial values declared separately
-const initialValues = {
-  firstName: "",
-  lastName: "",
-  email: "",
-  // phone: "",
-  password: "",
-};
-
-// Yup validation schema
 const validationSchema = Yup.object({
   firstName: Yup.string()
     .min(2, "First name must be at least 2 characters")
@@ -31,31 +21,38 @@ const validationSchema = Yup.object({
     .required("Password is required"),
 });
 
-function SimpleForm({ onSuccess }) {
-  // receive callback from parent
+function SimpleForm({ onSuccess, editingUser, onUpdate }) {
+  const initialValues = {
+    firstName: editingUser?.firstName || "",
+    lastName: editingUser?.lastName || "",
+    email: editingUser?.email || "",
+    password: "", // Keep empty for security
+  };
+
   const handleSubmit = async (values, { setSubmitting, resetForm }) => {
     try {
-      const response = await axios.post(
-        "http://localhost:5000/api/register",
-        values
-      );
-      console.log("Backend Response:", response.data);
+      if (editingUser) {
+        await onUpdate(editingUser._id, values);
+      } else {
+        await axios.post("http://localhost:5000/api/register", values);
+      }
       resetForm();
-
-      // Call parent function to refresh users list
       if (onSuccess) onSuccess();
     } catch (error) {
-      console.error("Error sending data to backend:", error);
+      console.error("Error:", error);
     } finally {
       setSubmitting(false);
     }
   };
 
   return (
-    <div className="max-w-md mx-auto mt-20 p-6 bg-white rounded-lg shadow-md">
-      <h2 className="text-2xl font-semibold text-center mb-6">Simple Form</h2>
+    <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
+      <h2 className="text-2xl font-semibold text-center mb-6">
+        {editingUser ? "Update User" : "Add User"}
+      </h2>
 
       <Formik
+        enableReinitialize
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
@@ -70,7 +67,7 @@ function SimpleForm({ onSuccess }) {
               <Field
                 name="firstName"
                 type="text"
-                placeholder="Enter your first name"
+                placeholder="Enter first name"
                 className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
               />
               <ErrorMessage
@@ -88,7 +85,7 @@ function SimpleForm({ onSuccess }) {
               <Field
                 name="lastName"
                 type="text"
-                placeholder="Enter your last name"
+                placeholder="Enter last name"
                 className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
               />
               <ErrorMessage
@@ -104,7 +101,7 @@ function SimpleForm({ onSuccess }) {
               <Field
                 name="email"
                 type="email"
-                placeholder="Enter your Email"
+                placeholder="Enter email"
                 className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
               />
               <ErrorMessage
@@ -120,7 +117,7 @@ function SimpleForm({ onSuccess }) {
               <Field
                 name="password"
                 type="password"
-                placeholder="Enter your Password"
+                placeholder="Enter password"
                 className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
               />
               <ErrorMessage
@@ -130,13 +127,12 @@ function SimpleForm({ onSuccess }) {
               />
             </div>
 
-            {/* Submit Button */}
             <button
               type="submit"
               disabled={isSubmitting}
               className="w-full py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 cursor-pointer"
             >
-              Submit
+              {editingUser ? "Update User" : "Submit"}
             </button>
           </Form>
         )}
