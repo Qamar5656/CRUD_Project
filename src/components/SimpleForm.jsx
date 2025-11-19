@@ -31,7 +31,8 @@ const validationSchema = Yup.object({
     .required("Password is required"),
 });
 
-function SimpleForm() {
+function SimpleForm({ onSuccess }) {
+  // receive callback from parent
   const handleSubmit = async (values, { setSubmitting, resetForm }) => {
     try {
       const response = await axios.post(
@@ -40,12 +41,16 @@ function SimpleForm() {
       );
       console.log("Backend Response:", response.data);
       resetForm();
+
+      // Call parent function to refresh users list
+      if (onSuccess) onSuccess();
     } catch (error) {
       console.error("Error sending data to backend:", error);
     } finally {
       setSubmitting(false);
     }
   };
+
   return (
     <div className="max-w-md mx-auto mt-20 p-6 bg-white rounded-lg shadow-md">
       <h2 className="text-2xl font-semibold text-center mb-6">Simple Form</h2>
@@ -129,7 +134,7 @@ function SimpleForm() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+              className="w-full py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 cursor-pointer"
             >
               Submit
             </button>
