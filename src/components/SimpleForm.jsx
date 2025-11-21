@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
@@ -22,14 +22,17 @@ const validationSchema = Yup.object({
 });
 
 function SimpleForm({ onSuccess, editingUser, onUpdate }) {
+  const [serverError, setServerError] = useState(""); // For backend errors
+
   const initialValues = {
     firstName: editingUser?.firstName || "",
     lastName: editingUser?.lastName || "",
     email: editingUser?.email || "",
-    password: "", // Keep empty for security
+    password: "",
   };
 
   const handleSubmit = async (values, { setSubmitting, resetForm }) => {
+    setServerError(""); // reset before new submit
     try {
       if (editingUser) {
         await onUpdate(editingUser._id, values);
@@ -39,7 +42,15 @@ function SimpleForm({ onSuccess, editingUser, onUpdate }) {
       resetForm();
       if (onSuccess) onSuccess();
     } catch (error) {
-      console.error("Error:", error);
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
+        setServerError(error.response.data.message);
+      } else {
+        setServerError("Something went wrong. Please try again.");
+      }
     } finally {
       setSubmitting(false);
     }
@@ -59,6 +70,13 @@ function SimpleForm({ onSuccess, editingUser, onUpdate }) {
       >
         {({ isSubmitting }) => (
           <Form className="space-y-4">
+            {/* Display backend/server error */}
+            {serverError && (
+              <div className="text-red-600 text-sm mb-2 text-center">
+                {serverError}
+              </div>
+            )}
+
             {/* First Name */}
             <div>
               <label className="block text-sm font-medium mb-1">
@@ -68,7 +86,7 @@ function SimpleForm({ onSuccess, editingUser, onUpdate }) {
                 name="firstName"
                 type="text"
                 placeholder="Enter first name"
-                className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-none"
               />
               <ErrorMessage
                 name="firstName"
@@ -86,7 +104,7 @@ function SimpleForm({ onSuccess, editingUser, onUpdate }) {
                 name="lastName"
                 type="text"
                 placeholder="Enter last name"
-                className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-none"
               />
               <ErrorMessage
                 name="lastName"
@@ -102,7 +120,7 @@ function SimpleForm({ onSuccess, editingUser, onUpdate }) {
                 name="email"
                 type="email"
                 placeholder="Enter email"
-                className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-none"
               />
               <ErrorMessage
                 name="email"
@@ -118,7 +136,7 @@ function SimpleForm({ onSuccess, editingUser, onUpdate }) {
                 name="password"
                 type="password"
                 placeholder="Enter password"
-                className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-none"
               />
               <ErrorMessage
                 name="password"
