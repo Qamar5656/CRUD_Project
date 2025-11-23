@@ -1,14 +1,14 @@
 import React from "react";
 import "./App.css";
-// import SimpleForm from "./components/SimpleForm.jsx";
-// import UsersList from "./components/UserList.jsx";
-import UsersPage from "./components/ParentUsers.jsx";
+import UsersPage from "./components/UsersPage/UsersPage";
+import UsersList from "./components/UsersPage/UsersList";
+import SimpleForm from "./components/UsersPage/SimpleForm";
 function App() {
   return (
     <>
       <UsersPage />
-      {/* <SimpleForm />
-      <UsersList /> */}
+      {/* <SimpleForm /> */}
+      {/* <UsersList /> */}
     </>
   );
 }
