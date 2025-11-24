@@ -1,14 +1,18 @@
 import React from "react";
 import "./App.css";
 import UsersPage from "./components/UsersPage/UsersPage";
-import UsersList from "./components/UsersPage/UsersList";
-import SimpleForm from "./components/UsersPage/SimpleForm";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import SignIn from "./components/SignIn/SIgnIn";
+import SignUp from "./components/SignUp/SIgnUp";
 function App() {
   return (
     <>
-      <UsersPage />
-      {/* <SimpleForm /> */}
-      {/* <UsersList /> */}
+      <Router>
+        <Routes>
+          <Route path="/" element={<SignIn />} />
+          <Route path="/signup" element={<SignUp />} />
+        </Routes>
+      </Router>
     </>
   );
 }
