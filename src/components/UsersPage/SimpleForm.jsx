@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { createUser } from "../../api/users";
-import { getErrorMessage } from "../../utils/utils";
+import { useNavigate } from "react-router-dom";
+// import { getErrorMessage } from "../../utils/utils";
 
 const validationSchema = Yup.object({
   firstName: Yup.string()
@@ -45,7 +46,10 @@ function SimpleForm({ editingUser, onUpdate, onSuccess }) {
         await createUser(values);
       }
       resetForm();
-      if (onSuccess) onSuccess();
+      if (onSuccess) {
+        onSuccess();
+      }
+      setTimeout(() => navigate("/dashboard"), 1000);
     } catch (error) {
       setServerError(getErrorMessage(error));
     } finally {
