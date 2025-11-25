@@ -112,6 +112,10 @@ const SignIn = () => {
           )}
         </Formik>
 
+        <p className="text-center text-red-5s00 mt-4 text-sm">
+          <Link to="/forget-password">Forgot Password ?</Link>
+        </p>
+
         <p className="text-center text-gray-500 mt-4 text-sm">
           Don't have an account?{" "}
           <Link

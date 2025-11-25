@@ -61,7 +61,7 @@ const SignUp = () => {
           text: res.data.message || "Signup Successful!",
         });
         resetForm();
-        setTimeout(() => navigate("/dashboard"), 1000);
+        navigate("/verify-otp", { state: { email: values.email } });
       }
     } catch (error) {
       setMessage({
