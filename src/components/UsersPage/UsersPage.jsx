@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import SimpleForm from "./SimpleForm";
-import UsersList from "./UsersList";
+// import UsersList from "./UsersList";
 import {
   fetchUsers as fetchUsersAPI,
   deleteUser as deleteUserAPI,
@@ -55,12 +55,12 @@ function UsersPage() {
         onUpdate={handleUpdateUser}
         onSuccess={fetchUsers}
       />
-      <UsersList
+      {/* <UsersList
         usersData={usersData}
         loadingUsers={loadingUsers}
         onDelete={handleDeleteUser}
         onEdit={(user) => setEditingUser(user)}
-      />
+      /> */}
     </div>
   );
 }
