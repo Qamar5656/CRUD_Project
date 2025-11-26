@@ -15,7 +15,7 @@ dist/
 dist-ssr/
 
 # Environment files (THIS prevents .env from being committed)
-.env
+*.env
 
 # Local config
 *.local
