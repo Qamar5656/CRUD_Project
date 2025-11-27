@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import SimpleForm from "./SimpleForm";
-// import UsersList from "./UsersList";
+import UsersList from "./UsersList";
 import {
   fetchUsers as fetchUsersAPI,
   deleteUser as deleteUserAPI,
@@ -37,8 +37,8 @@ function UsersPage() {
   const handleUpdateUser = async (id, updatedData) => {
     try {
       await updateUserAPI(id, updatedData);
-      setEditingUser(null);
-      fetchUsers();
+      setEditingUser(null); // Hide the form
+      fetchUsers(); // Refresh list
     } catch (err) {
       console.error("Error updating user:", err);
     }
@@ -50,17 +50,21 @@ function UsersPage() {
 
   return (
     <div className="p-4">
-      <SimpleForm
-        editingUser={editingUser}
-        onUpdate={handleUpdateUser}
-        onSuccess={fetchUsers}
-      />
-      {/* <UsersList
+      {/* Show form only when editing */}
+      {editingUser && (
+        <SimpleForm
+          editingUser={editingUser}
+          onUpdate={handleUpdateUser}
+          onCancel={() => setEditingUser(null)}
+        />
+      )}
+
+      <UsersList
         usersData={usersData}
         loadingUsers={loadingUsers}
         onDelete={handleDeleteUser}
         onEdit={(user) => setEditingUser(user)}
-      /> */}
+      />
     </div>
   );
 }
