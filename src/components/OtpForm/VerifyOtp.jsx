@@ -13,6 +13,9 @@ const VerifyOtp = () => {
   const [message, setMessage] = useState({ type: "", text: "" });
   const [loading, setLoading] = useState(false);
 
+  const BacktoSignUp = () => {
+    navigate("/signup", { state: { email } });
+  };
   if (!email) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-100">
@@ -72,53 +75,60 @@ const VerifyOtp = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
-      <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-md">
-        <h2 className="text-3xl font-extrabold text-gray-800 text-center mb-6">
-          Verify OTP
-        </h2>
+    <>
+      <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
+        <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-md">
+          <h2 className="text-3xl font-extrabold text-gray-800 text-center mb-6">
+            Verify OTP
+          </h2>
 
-        <p className="text-gray-600 mb-4 text-center">Email: {email}</p>
+          <p className="text-gray-600 mb-4 text-center">Email: {email}</p>
 
-        {message.text && (
-          <div
-            className={`mb-4 p-3 rounded ${
-              message.type === "success"
-                ? "bg-green-200 text-green-800"
-                : "bg-red-200 text-red-800"
-            }`}
-          >
-            {message.text}
+          {message.text && (
+            <div
+              className={`mb-4 p-3 rounded ${
+                message.type === "success"
+                  ? "bg-green-200 text-green-800"
+                  : "bg-red-200 text-red-800"
+              }`}
+            >
+              {message.text}
+            </div>
+          )}
+
+          <input
+            type="text"
+            maxLength={6}
+            value={otp}
+            onChange={(e) => setOtp(e.target.value)}
+            placeholder="Enter 6-digit OTP"
+            className="w-full border p-3 rounded mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+
+          <div className="flex justify-around">
+            <button
+              onClick={handleVerify}
+              className="border cursor-pointer mt-3 bg-blue-400 hover:bg-blue-600 font-bold text-md rounded-lg text-white p-3"
+            >
+              {loading ? "Verifying..." : "Verify OTP"}
+            </button>
+
+            <button
+              onClick={handleResend}
+              className="border cursor-pointer mt-3 bg-blue-400 hover:bg-blue-600 font-bold text-md rounded-lg text-white p-3"
+            >
+              {loading ? "Resend OTP" : "Resending ..."}
+            </button>
+            <button
+              onClick={BacktoSignUp}
+              className="border cursor-pointer mt-3 bg-blue-400 hover:bg-blue-600 font-bold text-md rounded-lg text-white p-3"
+            >
+              Back to SignUp
+            </button>
           </div>
-        )}
-
-        <input
-          type="text"
-          maxLength={6}
-          value={otp}
-          onChange={(e) => setOtp(e.target.value)}
-          placeholder="Enter 6-digit OTP"
-          className="w-full border p-3 rounded mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-
-        <div className="flex justify-around">
-          <button
-            onClick={handleVerify}
-            className="border cursor-pointer mt-3 bg-blue-400 hover:bg-blue-600 font-bold text-md rounded-lg text-white p-3"
-          >
-            {loading ? "Verifying..." : "Verify OTP"}
-          </button>
-
-          <button
-            onClick={handleResend}
-            className="border cursor-pointer mt-3 bg-blue-400 hover:bg-blue-600 font-bold text-md rounded-lg text-white p-3"
-          >
-            Resend OTP
-          </button>
         </div>
       </div>
-    </div>
+    </>
   );
 };
-
 export default VerifyOtp;
