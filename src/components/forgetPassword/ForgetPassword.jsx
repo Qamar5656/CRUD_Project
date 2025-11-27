@@ -29,6 +29,7 @@ const ForgetPassword = () => {
           type: "success",
           text: res.data.message,
         });
+        resetForm();
         // Navigate to reset password page after OTP sent
         setTimeout(() => {
           navigate("/reset-password", { state: { email: values.email } });
