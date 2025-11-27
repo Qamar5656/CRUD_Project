@@ -3,19 +3,10 @@ import InputField from "../Common/InputField";
 import Button from "../Common/Button";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { createUser } from "../../api/users";
 import { useEffect } from "react";
-
-const initialValues = {
-  firstName: "",
-  lastName: "",
-  email: "",
-  password: "",
-  confirmPassword: "",
-  profileImage: null,
-};
 
 const validationSchema = Yup.object({
   firstName: Yup.string()
@@ -61,6 +52,16 @@ const SignUp = () => {
   const [preview, setPreview] = useState(null);
   const navigate = useNavigate();
 
+  const location = useLocation();
+  const prefillEmail = location.state?.email || "";
+  const initialValues = {
+    firstName: "",
+    lastName: "",
+    email: prefillEmail,
+    password: "",
+    confirmPassword: "",
+    profileImage: null,
+  };
   const handleSubmit = async (values, { setSubmitting, resetForm }) => {
     setMessage({ type: "", text: "" });
 
