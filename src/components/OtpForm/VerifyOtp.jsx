@@ -39,7 +39,6 @@ const VerifyOtp = () => {
       if (res.data.success) {
         setMessage({ type: "success", text: "OTP verified successfully!" });
 
-        // Wait 1 second so user sees the success message
         setTimeout(() => {
           navigate("/dashboard");
         }, 1000);

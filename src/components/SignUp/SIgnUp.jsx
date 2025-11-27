@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import InputField from "../Common/InputField";
 import Button from "../Common/Button";
-import { Formik, Form } from "formik";
+import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import { Link, useNavigate } from "react-router-dom";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { createUser } from "../../api/users";
+import { useEffect } from "react";
 
 const initialValues = {
   firstName: "",
@@ -13,6 +14,7 @@ const initialValues = {
   email: "",
   password: "",
   confirmPassword: "",
+  profileImage: null,
 };
 
 const validationSchema = Yup.object({
@@ -36,24 +38,41 @@ const validationSchema = Yup.object({
   confirmPassword: Yup.string()
     .oneOf([Yup.ref("password"), null], "Passwords must match")
     .required("Confirm Password is required"),
+  profileImage: Yup.mixed()
+    .required("Image is require")
+    .test(
+      "File Size",
+      "File size is too large max 5MB is allowed ",
+      (value) => {
+        return value && value.size <= 5 * 1024 * 1024;
+      }
+    )
+    .test("File Type", "Allowed file format are PNG,JPG", (value) => {
+      return (
+        value && ["image/jpeg", "image/jpg", "image/png"].includes(value.type)
+      );
+    }),
 });
 
 const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [message, setMessage] = useState({ type: "", text: "" });
+  const [preview, setPreview] = useState(null);
   const navigate = useNavigate();
 
   const handleSubmit = async (values, { setSubmitting, resetForm }) => {
     setMessage({ type: "", text: "" });
 
     try {
-      const res = await createUser({
-        firstName: values.firstName,
-        lastName: values.lastName,
-        email: values.email,
-        password: values.password,
-      });
+      const formData = new FormData();
+      formData.append("firstName", values.firstName);
+      formData.append("lastName", values.lastName);
+      formData.append("email", values.email);
+      formData.append("password", values.password);
+      formData.append("profileImage", values.profileImage);
+
+      const res = await createUser(formData);
 
       if (res.data.success) {
         setMessage({
@@ -73,12 +92,31 @@ const SignUp = () => {
     }
   };
 
+  useEffect(() => {
+    return () => {
+      preview && URL.revokeObjectURL(preview);
+    };
+  }, [preview]);
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
       <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-md">
         <h2 className="text-3xl font-extrabold text-gray-800 text-center mb-6">
           Sign Up
         </h2>
+
+        <div className="flex items-center justify-center">
+          {preview && (
+            <div className="mt-2">
+              <p className="text-gray-500 text-sm mb-1">Preview:</p>
+              <img
+                src={preview}
+                alt="Profile Preview"
+                className="w-20 h-20 rounded-full object-cover"
+              />
+            </div>
+          )}
+        </div>
 
         {message.text && (
           <div
@@ -97,7 +135,7 @@ const SignUp = () => {
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
         >
-          {({ isSubmitting }) => (
+          {({ isSubmitting, setFieldValue }) => (
             <Form className="flex flex-col gap-4">
               {/* First Name */}
               <InputField
@@ -112,7 +150,23 @@ const SignUp = () => {
                 name="lastName"
                 label="Last Name"
                 type="text"
+                accept="image/*"
                 placeholder="Enter Your Last Name"
+              />
+
+              {/* Profile Image Uploading field  */}
+              <label htmlFor="profileImage">Upload Image</label>
+              <input
+                type="file"
+                name="profileImage"
+                className="border p-3 rounded-md w-full -mt-4"
+                onChange={(event) => {
+                  const file = event.currentTarget.files[0];
+                  if (file) {
+                    setFieldValue("profileImage", file); // Formik value
+                    setPreview(URL.createObjectURL(file)); // preview
+                  }
+                }}
               />
 
               {/* Email */}
