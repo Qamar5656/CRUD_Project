@@ -10,3 +10,5 @@ export const resendOtp = (data) => apiClient.post("/resend-otp", data);
 export const forgetPassword = (data) =>
   apiClient.post("/forgot-password", data);
 export const resetPassword = (data) => apiClient.post("/reset-password", data);
+export const refreshAccessToken = (refreshToken) =>
+  apiClient.post("/refresh-token", { refreshToken });
