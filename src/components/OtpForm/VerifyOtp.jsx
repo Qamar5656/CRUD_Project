@@ -33,21 +33,15 @@ const VerifyOtp = () => {
     setLoading(true);
     setMessage({ type: "", text: "" });
 
-    console.log("Frontend - Verifying OTP:", { email, otp, type: typeof otp });
-
     try {
       const res = await verifyOtp({ email, otp });
-      console.log("Frontend - OTP verification success:", res.data);
 
       if (res.data.success) {
         setMessage({ type: "success", text: "OTP verified successfully!" });
 
-        setTimeout(() => {
-          navigate("/dashboard");
-        }, 1000);
+        navigate("/dashboard");
       }
     } catch (error) {
-      console.log("Frontend - OTP verification error:", error.response?.data);
       setMessage({
         type: "error",
         text: error.response?.data?.message || "Invalid OTP, try again.",

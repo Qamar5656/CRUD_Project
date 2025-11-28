@@ -60,6 +60,7 @@ const SignUp = () => {
     email: prefillEmail,
     password: "",
     confirmPassword: "",
+    role: "user",
     profileImage: null,
   };
   const handleSubmit = async (values, { setSubmitting, resetForm }) => {
@@ -69,8 +70,10 @@ const SignUp = () => {
       const formData = new FormData();
       formData.append("firstName", values.firstName);
       formData.append("lastName", values.lastName);
+      a;
       formData.append("email", values.email);
       formData.append("password", values.password);
+      formData.append("role", values.role);
       formData.append("profileImage", values.profileImage);
 
       const res = await createUser(formData);
@@ -151,7 +154,6 @@ const SignUp = () => {
                 name="lastName"
                 label="Last Name"
                 type="text"
-                accept="image/*"
                 placeholder="Enter Your Last Name"
               />
 
@@ -177,6 +179,17 @@ const SignUp = () => {
                 type="email"
                 placeholder="Enter Your Email"
               />
+
+              {/* Role Selection */}
+              <label htmlFor="role">Select Role</label>
+              <Field
+                as="select"
+                name="role"
+                className="border p-3 rounded-md w-full"
+              >
+                <option value="user">User</option>
+                <option value="admin">Admin</option>
+              </Field>
 
               {/* Password */}
               <div className="relative w-full">

@@ -28,7 +28,7 @@ const SignIn = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loginError, setLoginError] = useState("");
   const [loginSuccess, setLoginSuccess] = useState("");
-  const navigate = useNavigate(); // to redirect after login
+  const navigate = useNavigate();
 
   const handleSubmit = async (values, { setSubmitting, resetForm }) => {
     setLoginError("");
@@ -38,14 +38,21 @@ const SignIn = () => {
       const data = response.data;
 
       if (data.success) {
-        // Save JWT token in localStorage
-        localStorage.setItem("token", data.token);
+        localStorage.setItem("user", JSON.stringify(data.user));
+        localStorage.setItem("accessToken", data.accessToken);
+        localStorage.setItem("refreshToken", data.refreshToken);
+
+        console.log("Saving user to localStorage:", data.user);
+        console.log("User before saving:", localStorage.getItem("user"));
+        localStorage.setItem("user", JSON.stringify(data.user));
+        console.log("User right after saving:", localStorage.getItem("user"));
+
+        setTimeout(() => {
+          navigate("/dashboard");
+        }, 100);
 
         setLoginSuccess("Login successful!");
         resetForm();
-        setTimeout(() => navigate("/dashboard"), 1000);
-      } else {
-        setLoginError(data.message || "Login failed");
       }
     } catch (error) {
       setLoginError(
