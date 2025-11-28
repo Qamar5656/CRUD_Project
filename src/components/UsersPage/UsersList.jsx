@@ -1,5 +1,8 @@
 import React from "react";
 
+const currentUser = JSON.parse(localStorage.getItem("user"));
+const isAdmin = currentUser?.role === "admin";
+
 function UsersList({ usersData, loadingUsers, onDelete, onEdit }) {
   if (loadingUsers) return <p className="text-center mt-10">Loading...</p>;
   if (!usersData || usersData.length === 0)
@@ -18,28 +21,32 @@ function UsersList({ usersData, loadingUsers, onDelete, onEdit }) {
             </tr>
           </thead>
           <tbody>
-            {usersData.map((user, i) => (
+            {usersData.map((u, i) => (
               <tr
-                key={user._id}
+                key={u._id}
                 className={i % 2 === 0 ? "bg-white" : "bg-gray-50"}
               >
                 <td className="px-6 py-3">
-                  {user.firstName} {user.lastName}
+                  {u.firstName} {u.lastName}
                 </td>
-                <td className="px-6 py-3">{user.email}</td>
+                <td className="px-6 py-3">{u.email}</td>
                 <td className="px-6 py-3 space-x-2">
-                  <button
-                    className="px-3 py-1 bg-blue-600 text-white rounded"
-                    onClick={() => onEdit(user)}
-                  >
-                    Update
-                  </button>
-                  <button
-                    className="px-3 py-1 bg-red-600 text-white rounded"
-                    onClick={() => onDelete(user._id)}
-                  >
-                    Delete
-                  </button>
+                  {isAdmin && (
+                    <>
+                      <button
+                        className="px-3 py-1 bg-blue-600 text-white rounded"
+                        onClick={() => onEdit(u)}
+                      >
+                        Update
+                      </button>
+                      <button
+                        className="px-3 py-1 bg-red-600 text-white rounded"
+                        onClick={() => onDelete(u._id)}
+                      >
+                        Delete
+                      </button>
+                    </>
+                  )}
                 </td>
               </tr>
             ))}
