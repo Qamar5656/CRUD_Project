@@ -70,7 +70,6 @@ const SignUp = () => {
       const formData = new FormData();
       formData.append("firstName", values.firstName);
       formData.append("lastName", values.lastName);
-      a;
       formData.append("email", values.email);
       formData.append("password", values.password);
       formData.append("role", values.role);
