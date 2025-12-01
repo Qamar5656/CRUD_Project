@@ -9,7 +9,6 @@ const Dashboard = () => {
 
   useEffect(() => {
     const stored = localStorage.getItem("user");
-    console.log("Dashboard local user:", stored);
     if (stored) setUser(JSON.parse(stored));
   }, []);
 
@@ -26,10 +25,10 @@ const Dashboard = () => {
     <>
       <div className="text-2xl font-bold text-center my-3">Dashboard</div>
 
-      {/* <p>
+      <p className="px-13 font-bold text-xl">
         {" "}
-        {`Hello ${user.name}, Welcome to the Dashboard. Your Role is ${user.role}`}{" "}
-      </p> */}
+        {`Hello ${user.firstName} ${user.lastName}, Welcome to the Dashboard. Your Role is ${user.role}`}{" "}
+      </p>
       <p className="px-13">
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo accusamus
         minus itaque? Inventore, provident est numquam odit minus sunt similique
