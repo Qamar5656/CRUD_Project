@@ -41,11 +41,7 @@ const SignIn = () => {
         localStorage.setItem("user", JSON.stringify(data.user));
         localStorage.setItem("accessToken", data.accessToken);
         localStorage.setItem("refreshToken", data.refreshToken);
-
-        console.log("Saving user to localStorage:", data.user);
-        console.log("User before saving:", localStorage.getItem("user"));
         localStorage.setItem("user", JSON.stringify(data.user));
-        console.log("User right after saving:", localStorage.getItem("user"));
 
         setTimeout(() => {
           navigate("/dashboard");
