@@ -1,9 +1,9 @@
 import React from "react";
 
-const currentUser = JSON.parse(localStorage.getItem("user"));
-const isAdmin = currentUser?.role === "admin";
-
 function UsersList({ usersData, loadingUsers, onDelete, onEdit }) {
+  const currentUser = JSON.parse(localStorage.getItem("user"));
+  const isAdmin = currentUser?.role === "admin"; // this is correct
+
   if (loadingUsers) return <p className="text-center mt-10">Loading...</p>;
   if (!usersData || usersData.length === 0)
     return <p className="text-center mt-10">No users found.</p>;
@@ -20,6 +20,7 @@ function UsersList({ usersData, loadingUsers, onDelete, onEdit }) {
               <th className="px-6 py-3 text-left">Actions</th>
             </tr>
           </thead>
+
           <tbody>
             {usersData.map((u, i) => (
               <tr
@@ -30,8 +31,10 @@ function UsersList({ usersData, loadingUsers, onDelete, onEdit }) {
                   {u.firstName} {u.lastName}
                 </td>
                 <td className="px-6 py-3">{u.email}</td>
+
+                {/* HERE IS THE ROLE LOGIC */}
                 <td className="px-6 py-3 space-x-2">
-                  {isAdmin && (
+                  {isAdmin ? (
                     <>
                       <button
                         className="px-3 py-1 bg-blue-600 text-white rounded"
@@ -46,6 +49,10 @@ function UsersList({ usersData, loadingUsers, onDelete, onEdit }) {
                         Delete
                       </button>
                     </>
+                  ) : (
+                    <span className="text-gray-400 text-sm italic">
+                      No actions
+                    </span>
                   )}
                 </td>
               </tr>
