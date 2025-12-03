@@ -16,12 +16,7 @@ const validationSchema = Yup.object({
   email: Yup.string()
     .email("Email format is incorrect")
     .required("Email is required"),
-  password: Yup.string()
-    .matches(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/,
-      "Password must include lowercase, uppercase, number & special character"
-    )
-    .required("Password is required"),
+  password: Yup.string().required("Password is required"),
 });
 
 const SignIn = () => {
